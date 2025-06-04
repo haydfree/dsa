@@ -2,11 +2,14 @@ CC=					clang
 LD=					clang
 
 TARGET=				libdsa.a
+TEST_TARGET=		test
 SRC_DIR=			src
 INCLUDE_DIR=		include
 BUILD_DIR=			build
+TEST_DIR=			test
 
 SRCS= 				$(wildcard $(SRC_DIR)/*.c)
+TEST_SRCS=			$(wildcard $(TEST_DIR)/*.c)	
 OBJS= 				$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 DBFLAGS= 			-g3 -O0
@@ -41,5 +44,13 @@ install:
 	rm -rf /usr/local/lib/$(TARGET)
 	cp $(TARGET) /usr/local/lib
 
-.PHONY: clean commit install all
+$(TEST_TARGET): $(TEST_SRC) $(TARGET)
+	@echo "test target"
+	$(CC) $(CCFLAGS) $(TEST_SRC) -o $(TEST_TARGET)
+
+test: $(TEST_TARGET)
+	@echo "test"	
+	./$(TEST_TARGET)
+
+.PHONY: clean commit install all test
 
