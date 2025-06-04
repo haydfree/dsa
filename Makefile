@@ -2,7 +2,7 @@ CC=					clang
 LD=					clang
 
 TARGET=				libdsa.a
-TEST_TARGET=		test
+TEST_TARGET=		run_tests
 SRC_DIR=			src
 INCLUDE_DIR=		include
 BUILD_DIR=			build
@@ -44,9 +44,9 @@ install:
 	rm -rf /usr/local/lib/$(TARGET)
 	cp $(TARGET) /usr/local/lib
 
-$(TEST_TARGET): $(TEST_SRC) $(TARGET)
+$(TEST_TARGET): $(TEST_SRCS) $(TARGET)
 	@echo "test target"
-	$(CC) $(CCFLAGS) $(TEST_SRC) -o $(TEST_TARGET)
+	$(CC) $(CCFLAGS) $(TEST_SRCS) -L. -ldsa -o $(TEST_TARGET)
 
 test: $(TEST_TARGET)
 	@echo "test"	
