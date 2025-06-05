@@ -32,7 +32,7 @@ $(TARGET): $(OBJS)
 
 clean:
 	@echo "clean"
-	rm -rf $(BUILD_DIR) $(TARGET) *.core
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET) *.core
 
 commit:
 	echo "commit"

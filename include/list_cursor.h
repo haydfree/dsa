@@ -26,7 +26,8 @@ i8 dsa_lc_pop_front(dsa_LC * const lc);
 i8 dsa_lc_pop_back(dsa_LC * const lc);
 i8 dsa_lc_get_next(const dsa_LC * const lc, const dsa_LCNode * const node, const dsa_LCNode *dst);
 i8 dsa_lc_get_prev(const dsa_LC * const lc, const dsa_LCNode * const node, const dsa_LCNode *dst);
-i8 dsa_lc_get_head(const dsa_LC * const lc, const dsa_LCNode *dst);
+i8 dsa_lc_get_head(const dsa_LC * const lc, const dsa_LCNode **dst);
+i8 dsa_lc_print(const dsa_LC * const lc);
 i8 dsa_lc_clear(dsa_LC * const lc);
 
 #endif
