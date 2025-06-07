@@ -13,7 +13,7 @@ typedef struct dsa_LCNode {
 
 typedef struct dsa_LCPool {
 	u32 nodes_used, nodes_free, capacity;
-	dsa_LCNode *nodes;
+	dsa_LCNode *nodes, *free_nodes;
 } dsa_LCPool;
 
 typedef struct dsa_LC {
@@ -23,11 +23,13 @@ typedef struct dsa_LC {
 
 i8 dsa_lc_pool_init(dsa_LCPool * const pool, const u32 capacity);
 i8 dsa_lc_init(dsa_LC * const list, dsa_LCPool * const pool);
+
+i8 dsa_lc_pool_find_free_node(const dsa_LCPool * const pool, const dsa_LCNode **dst);
+i8 dsa_lc_remove(dsa_LC * const list, dsa_LCNode * const node);
+i8 dsa_lc_find(const dsa_LC * const list, const void * const data, const dsa_LCNode **dst);
+
 i8 dsa_lc_push_front(dsa_LC * const list, void * const data);
 i8 dsa_lc_push_back(dsa_LC * const list, void * const data);
 i8 dsa_lc_pop_front(dsa_LC * const list, const void **data);
-i8 dsa_lc_remove(dsa_LC * const list, const void * const data);
-i8 dsa_lc_find(const dsa_LC * const list, const void * const data, const dsa_LCNode **dst);
 
 #endif
-

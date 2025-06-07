@@ -13,7 +13,7 @@ TEST_SRCS=			$(wildcard $(TEST_DIR)/*.c)
 OBJS= 				$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 DBFLAGS= 			-g3 -O0
-CCFLAGS= 			-ansi -Wextra -Werror -Wpedantic -Wall $(DBFLAGS) -I. -I$(INCLUDE_DIR)
+CCFLAGS= 			-std=c99 -Wextra -Werror -Wpedantic -Wall $(DBFLAGS) -I. -I$(INCLUDE_DIR)
 LDFLAGS=
 
 all: $(TARGET)
