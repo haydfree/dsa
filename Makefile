@@ -52,5 +52,9 @@ test: $(TEST_TARGET)
 	@echo "test"	
 	./$(TEST_TARGET)
 
-.PHONY: clean commit install all test
+debug: $(TEST_TARGET)
+	@echo "debug"
+	lldb $(TEST_TARGET)
+
+.PHONY: clean commit install all test debug
 
