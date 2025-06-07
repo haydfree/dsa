@@ -24,4 +24,7 @@ typedef struct dsa_LCPool
 	dsa_LCNode *ptr;
 } dsa_LCPool;
 
+i8 dsa_lc_init(dsa_LCPool * const pool);
+
+
 #endif
