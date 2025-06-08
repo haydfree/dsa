@@ -53,7 +53,7 @@ STATIC_ASSERT(sizeof(b32) == 4, b32_must_be_4_bytes);
 #endif
 
 static inline void
-debug_log(i32 level, const char* file, i32 line, const char* func, const char* fmt, ...)
+debug_log(i32 level, const char *file, i32 line, const char *func, const char *fmt, ...)
 {
     if (level <= DEBUG_LEVEL) 
 	{
