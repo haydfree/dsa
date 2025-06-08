@@ -8,7 +8,7 @@ TestStats g_test_stats = {0};
 void
 test_lc_pool_init(void)
 {
-    ListTestFixture fixture;
+    ListTestFixture fixture = {0};
 
     TEST_BEGIN("test_lc_pool_init");
     
