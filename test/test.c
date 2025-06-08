@@ -154,6 +154,7 @@ void
 test_lc_push_front(void)
 {
     ListTestFixture fixture = {0};
+	i64 data = 0;
 	TEST_BEGIN("test_lc_push_front");
 
 	// null list
@@ -183,7 +184,17 @@ test_lc_push_front(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
+	// max *data
+	setup_list_fixture(&fixture);
+	data = __INT64_MAX__;
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)&data) == EXIT_SUCCESS, "Pushing front should succeed with max *data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// min data
+	
+
 	// full list
 
 	// null pool
