@@ -25,6 +25,7 @@ i8 dsa_lc_pool_init(dsa_LCPool * const pool, const u32 capacity);
 i8 dsa_lc_init(dsa_LC * const list, const dsa_LCPool * const pool);
 
 i8 dsa_lc_find(const dsa_LC * const list, const void * const data, const dsa_LCNode **dst);
+i8 dsa_lc_get_tail(const dsa_LC * const list, const dsa_LCNode **dst);
 
 i8 dsa_lc_push_front(dsa_LC * const list, const void * const data);
 i8 dsa_lc_push_back(dsa_LC * const list, const void * const data);

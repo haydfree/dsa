@@ -86,6 +86,25 @@ cleanup:
 }
 
 i8
+dsa_lc_get_tail(const dsa_LC * const list, const dsa_LCNode **dst)
+{
+	i8 ret = EXIT_FAILURE;
+	dsa_LCNode *cur = NULL;
+
+	GUARD_NULL(list);
+	GUARD_NULL(dst);
+
+	cur = list->head;
+	while (cur->next != NULL) { cur = cur->next; }
+	*dst = cur;
+	GUARD_NULL(*dst);
+
+	ret = EXIT_SUCCESS;
+cleanup:
+	return ret;
+}
+
+i8
 dsa_lc_push_front(dsa_LC * const list, const void * const data)
 {
     i8 ret = EXIT_FAILURE;
