@@ -34,8 +34,10 @@ extern TestStats g_test_stats;
 
 #define TEST_DEBUG_LEVEL TEST_DEBUG_TRACE
 
-#define TEST_DEBUG_PRINT(level, fmt, ...) do { \
-    if (level <= TEST_DEBUG_LEVEL) { \
+#define TEST_DEBUG_PRINT(level, fmt, ...) \
+do { \
+    if (level <= TEST_DEBUG_LEVEL) \
+    { \
         printf("[%s:%d] " fmt "\n", __func__, __LINE__ __VA_OPT__(,) __VA_ARGS__); \
     } \
 } while(0)
@@ -46,37 +48,56 @@ extern TestStats g_test_stats;
 
 #define TEST_LOOP_BEGIN(iter_name, max_iter) \
 do { \
-    TEST_INFO("%s", "Starting loop"); \
+    TEST_INFO("Starting loop '%s' (max iterations: %d)", iter_name, max_iter); \
 } while(0)
 
 #define TEST_LOOP_ITER(iter_name, current) \
 do { \
-    TEST_TRACE("%s", "Loop iteration"); \
+    TEST_TRACE("Loop '%s' iteration %d", iter_name, current); \
 } while(0)
 
 #define TEST_LOOP_END(iter_name) \
 do { \
-    TEST_INFO("%s", "Completed loop"); \
+    TEST_INFO("Completed loop '%s'", iter_name); \
 } while(0)
 
 #define TEST_DUMP_LIST_STATE(list) \
 do { \
     TEST_INFO("%s", "List state:"); \
-    TEST_INFO("%s", "  Head: "); \
-    TEST_INFO("%s", "  Pool: "); \
-    if ((list)->pool) { \
-        TEST_INFO("%s", "  Pool capacity: "); \
-        TEST_INFO("%s", "  Pool used: "); \
-        TEST_INFO("%s", "  Pool free: "); \
+    TEST_INFO("  List ptr: %p", (void*)(list)); \
+    if ((list) == NULL) \
+	{ \
+        TEST_INFO("%s", "  List is NULL"); \
+    } else \
+	{ \
+        TEST_INFO("  Head: %p", (void*)(list)->head); \
+        if ((list)->head) \
+		{ \
+            TEST_INFO("  Head data: %p", (list)->head->data); \
+            TEST_INFO("  Head next: %p", (void*)(list)->head->next); \
+        } \
+        TEST_INFO("  Pool: %p", (void*)(list)->pool); \
+        if ((list)->pool) \
+		{ \
+            TEST_INFO("  Pool capacity: %u", (list)->pool->capacity); \
+            TEST_INFO("  Pool used: %u", (list)->pool->nodes_used); \
+            TEST_INFO("  Pool free: %u", (list)->pool->nodes_free); \
+        } \
     } \
 } while(0)
 
 #define TEST_DUMP_NODE(node) \
 do { \
     TEST_INFO("%s", "Node state:"); \
-    TEST_INFO("%s", "  Address: "); \
-    TEST_INFO("%s", "  Data: "); \
-    TEST_INFO("%s", "  Next: "); \
+    TEST_INFO("  Address: %p", (void*)(node)); \
+    if ((node)) \
+	{ \
+        TEST_INFO("  Data: %p", (node)->data); \
+        TEST_INFO("  Next: %p", (void*)(node)->next); \
+    } else \
+	{ \
+        TEST_INFO("%s", "  Node is NULL"); \
+    } \
 } while(0)
 
 #define TEST_BEGIN(name) \
@@ -101,9 +122,11 @@ do { \
 
 #define TEST_ASSERT(cond, msg) \
 do { \
-    if (!(cond)) { \
+    if (!(cond)) \
+    { \
         TEST_ERROR("%s", "Assertion failed"); \
-        if (g_test_stats.current_fixture) { \
+        if (g_test_stats.current_fixture) \
+        { \
             TEST_DUMP_LIST_STATE(&g_test_stats.current_fixture->list); \
         } \
         TEST_FAIL(msg); \
@@ -112,7 +135,8 @@ do { \
 
 #define TEST_ASSERT_EQ(actual, expected, msg) \
 do { \
-    if ((actual) != (expected)) { \
+    if ((actual) != (expected)) \
+    { \
         TEST_ERROR("%s", "Assertion failed - values not equal"); \
         TEST_FAIL(msg); \
     } \
@@ -120,7 +144,8 @@ do { \
 
 #define TEST_ASSERT_NULL(ptr, msg) \
 do { \
-    if ((ptr) != NULL) { \
+    if ((ptr) != NULL) \
+    { \
         TEST_ERROR("%s", "Assertion failed - expected NULL"); \
         TEST_FAIL(msg); \
     } \
@@ -128,7 +153,8 @@ do { \
 
 #define TEST_ASSERT_NOT_NULL(ptr, msg) \
 do { \
-    if ((ptr) == NULL) { \
+    if ((ptr) == NULL) \
+    { \
         TEST_ERROR("%s", "Assertion failed - expected non-NULL"); \
         TEST_FAIL(msg); \
     } \
@@ -148,21 +174,19 @@ do { \
 } while(0)
 
 static inline void
-setup_list_fixture(ListTestFixture* fixture)
+setup_list_fixture(ListTestFixture *fixture)
 {
     ZERO_MEM(fixture, sizeof(*fixture));
     fixture->capacity = sizeof(fixture->nodes) / sizeof(fixture->nodes[0]);
-    fixture->pool.nodes = fixture->nodes;
+    fixture->pool.nodes_start = fixture->nodes;
     g_test_stats.current_fixture = fixture;
     TEST_INFO("%s", "Setting up list fixture");
-    TEST_ASSERT(dsa_lc_pool_init(&fixture->pool, fixture->capacity) == EXIT_SUCCESS, 
-                "Failed to initialize pool");
-    TEST_ASSERT(dsa_lc_init(&fixture->list, &fixture->pool) == EXIT_SUCCESS,
-                "Failed to initialize list");
+    TEST_ASSERT(dsa_lc_pool_init(&fixture->pool, fixture->capacity) == EXIT_SUCCESS, "Failed to initialize pool");
+    TEST_ASSERT(dsa_lc_init(&fixture->list, &fixture->pool) == EXIT_SUCCESS, "Failed to initialize list");
 }
 
 static inline void
-teardown_list_fixture(ListTestFixture* fixture)
+teardown_list_fixture(ListTestFixture *fixture)
 {
     TEST_INFO("%s", "Tearing down list fixture");
     TEST_DUMP_LIST_STATE(&fixture->list);
@@ -170,7 +194,7 @@ teardown_list_fixture(ListTestFixture* fixture)
 }
 
 static inline void
-verify_list_state(const dsa_LC* list, u32 expected_used, u32 expected_free)
+verify_list_state(const dsa_LC *list, u32 expected_used, u32 expected_free)
 {
     TEST_ASSERT(list->pool->nodes_used == expected_used, 
                 "Incorrect number of used nodes");
@@ -179,7 +203,7 @@ verify_list_state(const dsa_LC* list, u32 expected_used, u32 expected_free)
 }
 
 static inline void
-verify_node_data(const dsa_LCNode* node, const void* expected_data)
+verify_node_data(const dsa_LCNode *node, const void *expected_data)
 {
     TEST_ASSERT_NOT_NULL(node, "Node is NULL");
     TEST_ASSERT_EQ(node->data, expected_data, "Node data mismatch");

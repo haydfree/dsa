@@ -13,7 +13,7 @@ typedef struct dsa_LCNode {
 
 typedef struct dsa_LCPool {
 	u32 nodes_used, nodes_free, capacity;
-	dsa_LCNode *nodes, *free_nodes;
+	dsa_LCNode *nodes_start, *nodes_end;
 } dsa_LCPool;
 
 typedef struct dsa_LC {

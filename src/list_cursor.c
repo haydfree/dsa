@@ -11,9 +11,9 @@ dsa_lc_pool_init(dsa_LCPool *pool, u32 capacity)
     
     for (; i < capacity; i++) 
     {
-        pool->nodes[i].data = NULL;
-        pool->nodes[i].next = NULL;
-        pool->nodes[i].is_used = FALSE;
+        pool->nodes_start[i].data = NULL;
+        pool->nodes_start[i].next = NULL;
+        pool->nodes_start[i].is_used = FALSE;
     }
     pool->nodes_used = 0;
     pool->nodes_free = pool->capacity = capacity;
@@ -51,7 +51,7 @@ dsa_lc_pool_find_free_node(const dsa_LCPool * const pool, const dsa_LCNode **dst
 
     for (; i < pool->capacity; i++) 
     {
-        if (pool->nodes[i].is_used == FALSE) { *dst = &pool->nodes[i]; break; }
+        if (pool->nodes_start[i].is_used == FALSE) { *dst = &pool->nodes_start[i]; break; }
     }
 
     ret = EXIT_SUCCESS;
@@ -63,29 +63,26 @@ i8
 dsa_lc_push_front(dsa_LC * const list, void * const data)
 {
     i8 ret = EXIT_FAILURE;
-    dsa_LCNode *tmp = NULL, *new_node = NULL;
-    u32 i;
+    dsa_LCNode *new_node = NULL;
 
     GUARD_NULL(list);
     GUARD_NULL(data);
     GUARD_NON_POS(list->pool->nodes_free);
 
-    for (i = 0; i < list->pool->capacity; ++i) {
-        if (!list->pool->nodes[i].is_used) {
-            new_node = &list->pool->nodes[i];
-            break;
-        }
-    }
-    GUARD_NULL(new_node);
+	// find first unused node
+	GUARD_FAILURE(dsa_lc_pool_find_free_node(list->pool, (const dsa_LCNode**)&new_node));
+	GUARD_NULL(new_node);
 
-    tmp = list->head;
-    new_node->data = data;
-    new_node->next = tmp;
-    new_node->is_used = TRUE;
-    list->head = new_node;
-    list->pool->nodes_free--;
-    list->pool->nodes_used++;
-    list->pool->free_nodes = &list->pool->nodes[i];
+	new_node->data = data;
+	new_node->is_used = TRUE;
+	list->pool->nodes_free--;
+	list->pool->nodes_used++;
+	list->pool->nodes_end = new_node;
+
+	// if head is NULL, push new node to head
+	if (!list->head) { list->head = new_node; } 
+	// if head is not NULL, push head to node->next and set head to new node
+	else { new_node->next = list->head; list->head = new_node; }
 
     ret = EXIT_SUCCESS;
 cleanup:
@@ -105,8 +102,8 @@ dsa_lc_push_back(dsa_LC * const list, void * const data)
 
     /* Find first unused node */
     for (i = 0; i < list->pool->capacity; ++i) {
-        if (!list->pool->nodes[i].is_used) {
-            new_node = &list->pool->nodes[i];
+        if (!list->pool->nodes_start[i].is_used) {
+            new_node = &list->pool->nodes_start[i];
             break;
         }
     }
