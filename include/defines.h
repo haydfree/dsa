@@ -9,7 +9,7 @@
 
 // Debug levels - can be set via compiler flag -DDEBUG_LEVEL=X
 #ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL 4  // 0=off, 1=errors, 2=warnings, 3=info, 4=trace
+#define DEBUG_LEVEL 0  // 0=off, 1=errors, 2=warnings, 3=info, 4=trace
 #endif
 
 #define STATIC_ASSERT(cond, msg) typedef char static_assertion_##msg[(cond) ? 1 : -1]
