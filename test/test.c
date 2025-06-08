@@ -31,6 +31,7 @@ void
 test_lc_init(void)
 {
     ListTestFixture fixture = {0};
+	(void)fixture;
 }
 
 int
