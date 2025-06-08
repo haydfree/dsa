@@ -200,6 +200,12 @@ test_lc_push_front(void)
 	teardown_list_fixture(&fixture);
 
 	// min *data
+	setup_list_fixture(&fixture);
+	data = __INT64_MIN__;
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)&data) == EXIT_SUCCESS, "Pushing front should succeed with min *data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
 	
 
 	// full list
