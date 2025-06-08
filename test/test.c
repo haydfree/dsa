@@ -117,6 +117,47 @@ test_lc_init(void)
 }
 
 void
+test_lc_find(void)
+{
+    ListTestFixture fixture = {0};
+	TEST_BEGIN("test_lc_find");
+
+	// null list
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_find(NULL, (const void*)0x01, (const dsa_LCNode**)&fixture.list.head) == EXIT_FAILURE, "Finding should fail with NULL list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
+	// empty list
+	// full list
+	// null pool
+	// empty pool
+	// full pool
+	// null data
+	// max data
+	// max *data
+	// min data
+	// min *data
+	// max nodes free
+	// zero nodes free
+	// max nodes used
+	// zero nodes used
+	// max nodes capacity
+	// zero nodes capacity
+	// max nodes start
+	// null nodes start
+	// max nodes end
+	// null nodes end
+	// null dst
+	// max dst
+	// null *dst
+	// max *dst
+
+	TEST_END();
+}
+
+void
 test_lc_get_tail(void)
 {
     ListTestFixture fixture = {0};
@@ -375,6 +416,7 @@ main(void)
     
     test_lc_pool_init();
 	test_lc_init();
+	test_lc_find();
 	test_lc_get_tail();
 	test_lc_push_front();
 	test_lc_push_back();
