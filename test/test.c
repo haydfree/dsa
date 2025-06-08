@@ -28,6 +28,23 @@ cleanup:
 	return ret;
 }
 
+static inline i8
+fill_fixture_list(ListTestFixture * const fixture)
+{
+	i8 ret = EXIT_FAILURE;
+
+	GUARD_NULL(fixture);
+	GUARD_FAILURE(fill_fixture_pool(fixture));
+
+	fixture->list.head = &fixture->pool.nodes_start[0];
+	fixture->list.tail = &fixture->pool.nodes_start[TEST_POOL_CAPACITY - 1];
+	fixture->list.size = TEST_POOL_CAPACITY;
+
+	ret = EXIT_SUCCESS;
+cleanup:
+	return ret;
+}
+
 void
 test_lc_pool_init(void)
 {
@@ -111,7 +128,7 @@ test_lc_get_tail(void)
 	teardown_list_fixture(&fixture);
 
 	setup_list_fixture(&fixture);
-	fill_fixture_pool(&fixture);
+	fill_fixture_list(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	TEST_ASSERT(dsa_lc_get_tail(&fixture.list, (const dsa_LCNode**)&tail) == EXIT_SUCCESS, "Getting tail should succeed with full list");
 	TEST_DUMP_LIST_STATE(&fixture.list);
