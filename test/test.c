@@ -37,8 +37,7 @@ fill_fixture_list(ListTestFixture * const fixture)
 	GUARD_FAILURE(fill_fixture_pool(fixture));
 
 	fixture->list.head = &fixture->pool.nodes_start[0];
-	fixture->list.tail = &fixture->pool.nodes_start[TEST_POOL_CAPACITY - 1];
-	fixture->list.size = TEST_POOL_CAPACITY;
+	fixture->list.pool = &fixture->pool;
 
 	ret = EXIT_SUCCESS;
 cleanup:
