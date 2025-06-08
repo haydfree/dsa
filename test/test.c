@@ -197,6 +197,7 @@ main(void)
     test_lc_pool_init();
 	test_lc_init();
 	test_lc_get_tail();
+	test_lc_push_front();
     
     TEST_SUITE_END();
     
