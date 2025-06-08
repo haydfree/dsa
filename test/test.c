@@ -170,7 +170,13 @@ test_lc_push_front(void)
 	teardown_list_fixture(&fixture);
 
 	// null data
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, NULL) == EXIT_FAILURE, "Pushing front should fail with NULL data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
 
+	// max data
 	// full list
 
 	// null pool
