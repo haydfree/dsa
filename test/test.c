@@ -133,6 +133,20 @@ test_lc_get_tail(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
+	setup_list_fixture(&fixture);
+	fill_fixture_list(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_get_tail(NULL, (const dsa_LCNode**)&tail) == EXIT_FAILURE, "Getting tail should fail with NULL list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
+	setup_list_fixture(&fixture);
+	fill_fixture_list(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_get_tail(&fixture.list, NULL) == EXIT_FAILURE, "Getting tail should fail with NULL tail");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	TEST_END();
 }
 
