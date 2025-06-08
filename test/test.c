@@ -9,7 +9,7 @@ static inline void
 fill_fixture_pool(ListTestFixture * const fixture)
 {
 	i8 ret = EXIT_FAILURE;
-	u32 i = 0;
+	u64 i = 0;
 
 	GUARD_NULL(fixture);
 
