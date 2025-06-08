@@ -11,17 +11,26 @@ test_lc_pool_init(void)
     ListTestFixture fixture = {0};
 
     TEST_BEGIN("test_lc_pool_init");
-    
     setup_list_fixture(&fixture);
-    
     TEST_DUMP_POOL_STATE(&fixture.pool);
     TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, TEST_POOL_CAPACITY) == EXIT_SUCCESS, "Pool initialization failed");
     TEST_DUMP_POOL_STATE(&fixture.pool);
-    
     verify_list_state(&fixture.list, 0, fixture.capacity);
-    
     teardown_list_fixture(&fixture);
+
+	setup_list_fixture(&fixture);
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	TEST_ASSERT(dsa_lc_pool_init(NULL, TEST_POOL_CAPACITY) == EXIT_FAILURE, "Pool initialization should fail with NULL pool");
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	teardown_list_fixture(&fixture);
+
     TEST_END();
+}
+
+void
+test_lc_init(void)
+{
+    ListTestFixture fixture = {0};
 }
 
 int

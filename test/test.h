@@ -9,5 +9,6 @@
 #include "test_framework.h"
 
 void test_lc_pool_init(void);
+void test_lc_init(void);
 
 #endif
