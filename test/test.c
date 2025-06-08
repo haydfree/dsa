@@ -24,6 +24,12 @@ test_lc_pool_init(void)
 	TEST_DUMP_POOL_STATE(&fixture.pool);
 	teardown_list_fixture(&fixture);
 
+	setup_list_fixture(&fixture);
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, 0) == EXIT_FAILURE, "Pool initialization should fail with 0 capacity");
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	teardown_list_fixture(&fixture);
+
     TEST_END();
 }
 
