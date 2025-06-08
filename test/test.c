@@ -130,6 +130,12 @@ test_lc_find(void)
 	teardown_list_fixture(&fixture);
 
 	// empty list
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_find(&fixture.list, (const void*)0x01, (const dsa_LCNode**)&fixture.list.head) == EXIT_FAILURE, "Finding should fail with empty list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// full list
 	// null pool
 	// empty pool
