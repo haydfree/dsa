@@ -129,7 +129,7 @@ i8
 dsa_lc_push_back(dsa_LC * const list, const void * const data)
 {
     i8 ret = EXIT_FAILURE;
-    dsa_LCNode *new_node = NULL;
+    dsa_LCNode *new_node = NULL, *tail = NULL;
 
     GUARD_NULL(list);
     GUARD_NULL(data);
@@ -139,7 +139,7 @@ dsa_lc_push_back(dsa_LC * const list, const void * const data)
 	// if head is NULL, push new node to head
 	if (!list->head) { list->head = new_node; }
 	// if head is not NULL, push new node to end
-	else {  }
+	else { GUARD_FAILURE(dsa_lc_get_tail(list, (const dsa_LCNode**)&tail)); tail->next = new_node; }
 
     ret = EXIT_SUCCESS;
 cleanup:
