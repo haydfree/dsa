@@ -159,11 +159,12 @@ dsa_lc_pop_front(dsa_LC * const list, const void **data)
     node = list->head;
     *data = node->data;
     list->head = node->next;
-
     node->data = NULL;
+	node->next = NULL;
     node->is_used = FALSE;
     list->pool->nodes_free++;
     list->pool->nodes_used--;
+	list->pool->nodes_end = node;
 
     ret = EXIT_SUCCESS;
 cleanup:

@@ -61,6 +61,15 @@ do { \
     TEST_INFO("Completed loop '%s'", iter_name); \
 } while(0)
 
+#define TEST_DUMP_POOL_STATE(pool) \
+do { \
+    TEST_INFO("%s", "Pool state:"); \
+    TEST_INFO("  Pool ptr: %p", (void*)(pool)); \
+    TEST_INFO("  Pool capacity: %u", (pool)->capacity); \
+    TEST_INFO("  Pool used: %u", (pool)->nodes_used); \
+    TEST_INFO("  Pool free: %u", (pool)->nodes_free); \
+} while(0)
+
 #define TEST_DUMP_LIST_STATE(list) \
 do { \
     TEST_INFO("%s", "List state:"); \
