@@ -257,7 +257,34 @@ test_lc_push_front(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
-	// negative nodes free
+	TEST_END();
+}
+
+void
+test_lc_push_back(void)
+{
+    ListTestFixture fixture = {0};
+	TEST_BEGIN("test_lc_push_back");
+
+	// null list
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(NULL, (const void*)0x01) == EXIT_FAILURE, "Pushing back should fail with NULL list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
+	// empty list
+	// full list
+	// null data
+	// max data
+	// max *data
+	// min data
+	// min *data
+	// null pool
+	// empty pool
+	// full pool
+	// max nodes free
+	// zero nodes free
 
 	TEST_END();
 }
@@ -271,7 +298,8 @@ main(void)
 	test_lc_init();
 	test_lc_get_tail();
 	test_lc_push_front();
-    
+	test_lc_push_back();
+
     TEST_SUITE_END();
     
     return g_test_stats.failed_tests == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
