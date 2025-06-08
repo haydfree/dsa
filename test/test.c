@@ -173,6 +173,14 @@ test_lc_push_front(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
+	// full list
+	setup_list_fixture(&fixture);
+	fill_fixture_list(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing front should fail with full list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// null data
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
@@ -210,14 +218,6 @@ test_lc_push_front(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
-	// full list
-	setup_list_fixture(&fixture);
-	fill_fixture_list(&fixture);
-	TEST_DUMP_LIST_STATE(&fixture.list);
-	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing front should fail with full list");
-	TEST_DUMP_LIST_STATE(&fixture.list);
-	teardown_list_fixture(&fixture);
-
 	// null pool
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
@@ -227,15 +227,13 @@ test_lc_push_front(void)
 	teardown_list_fixture(&fixture);
 
 	// empty pool
-	
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing front should fail with empty pool");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
 
 	// full pool
-
-	// null data
-
-	// max *data
-
-	// min *data
 
 	// negative nodes free
 
