@@ -177,6 +177,13 @@ test_lc_push_front(void)
 	teardown_list_fixture(&fixture);
 
 	// max data
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0xFFFFFFFFFFFFFFFF) == EXIT_SUCCESS, "Pushing front should succeed with max data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
+	// min data
 	// full list
 
 	// null pool
