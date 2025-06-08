@@ -54,7 +54,10 @@ test: $(TEST_TARGET)
 
 debug: $(TEST_TARGET)
 	@echo "debug"
-	lldb $(TEST_TARGET)
+	lldb -- \
+		-o "process handle SIGTRAP -n true -s true -p true" \
+		-o "run" \
+		$(TEST_TARGET)
 
-.PHONY: clean commit install all test debug
+.PHONY: clean commit install all test debug debug-lldb
 

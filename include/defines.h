@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 // Debug levels - can be set via compiler flag -DDEBUG_LEVEL=X
 #ifndef DEBUG_LEVEL
@@ -42,11 +43,13 @@ STATIC_ASSERT(sizeof(b32) == 4, b32_must_be_4_bytes);
 #define TRUE 1
 #define FALSE 0
 
+// Debug break implementation
 #if _MSC_VER
 #include <intrin.h>
 #define DEBUG_BREAK() __debugbreak()
 #else
-#define DEBUG_BREAK() __builtin_trap()
+// Use raise(SIGTRAP) instead of __builtin_trap() for better debugger integration
+#define DEBUG_BREAK() raise(SIGTRAP)
 #endif
 
 static inline void
