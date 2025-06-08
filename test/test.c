@@ -264,6 +264,7 @@ void
 test_lc_push_back(void)
 {
     ListTestFixture fixture = {0};
+	i64 data = 0;
 	TEST_BEGIN("test_lc_push_back");
 
 	// null list
@@ -289,15 +290,80 @@ test_lc_push_back(void)
 	teardown_list_fixture(&fixture);
 
 	// null data
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, NULL) == EXIT_FAILURE, "Pushing back should fail with NULL data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// max data
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0xFFFFFFFFFFFFFFFF) == EXIT_SUCCESS, "Pushing back should succeed with max data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// max *data
+	setup_list_fixture(&fixture);
+	data = __INT64_MAX__;
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)&data) == EXIT_SUCCESS, "Pushing back should succeed with max *data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// min data
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing back should succeed with min data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// min *data
+	setup_list_fixture(&fixture);
+	data = __INT64_MIN__;
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)&data) == EXIT_SUCCESS, "Pushing back should succeed with min *data");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// null pool
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	fixture.list.pool = NULL;
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing back should fail with NULL pool");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// empty pool
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing back should succeed with empty pool");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// full pool
+	setup_list_fixture(&fixture);
+	fill_fixture_pool(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing back should fail with full pool");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// max nodes free
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	fixture.list.pool->nodes_free = __UINT32_MAX__;
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing back should succeed with max nodes free");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// zero nodes free
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	fixture.list.pool->nodes_free = 0;
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing back should fail with zero nodes free");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
 
 	TEST_END();
 }
