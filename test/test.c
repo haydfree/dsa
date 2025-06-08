@@ -2,6 +2,9 @@
 #include "test_framework.h"
 
 #define TEST_POOL_CAPACITY 10
+#ifndef __INT64_MIN__
+#define __INT64_MIN__ -9,223,372,036,854,775,808
+#endif
 
 TestStats g_test_stats = {0};
 
