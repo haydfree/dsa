@@ -82,6 +82,8 @@ do { \
             TEST_INFO("  Pool capacity: %u", (list)->pool->capacity); \
             TEST_INFO("  Pool used: %u", (list)->pool->nodes_used); \
             TEST_INFO("  Pool free: %u", (list)->pool->nodes_free); \
+			TEST_INFO("  Pool nodes_start: %p", (void*)(list)->pool->nodes_start); \
+			TEST_INFO("  Pool nodes_end: %p", (void*)(list)->pool->nodes_end); \
         } \
     } \
 } while(0)
@@ -196,10 +198,8 @@ teardown_list_fixture(ListTestFixture *fixture)
 static inline void
 verify_list_state(const dsa_LC *list, u32 expected_used, u32 expected_free)
 {
-    TEST_ASSERT(list->pool->nodes_used == expected_used, 
-                "Incorrect number of used nodes");
-    TEST_ASSERT(list->pool->nodes_free == expected_free,
-                "Incorrect number of free nodes");
+    TEST_ASSERT(list->pool->nodes_used == expected_used, "Incorrect number of used nodes");
+    TEST_ASSERT(list->pool->nodes_free == expected_free, "Incorrect number of free nodes");
 }
 
 static inline void

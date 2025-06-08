@@ -1,7 +1,52 @@
 #include "list_cursor.h"
 
+static inline i8 
+dsa_lc_pool_node_find_free(const dsa_LCPool * const pool, const dsa_LCNode **dst)
+{
+    i8 ret = EXIT_FAILURE;
+    u32 i = 0;
+
+    GUARD_NULL(pool);
+    GUARD_NULL(dst);
+
+    for (; i < pool->capacity; i++) 
+    {
+        if (pool->nodes_start[i].is_used == FALSE) { *dst = &pool->nodes_start[i]; break; }
+    }
+
+    ret = EXIT_SUCCESS;
+cleanup:
+    return ret;
+}
+
+static inline i8
+dsa_lc_pool_node_alloc(dsa_LCPool * const pool, dsa_LCNode **new_node, const void * const data)
+{
+	i8 ret = EXIT_FAILURE;
+
+	GUARD_NULL(pool);
+	GUARD_NULL(new_node);
+	GUARD_NULL(data);
+	GUARD_NON_POS(pool->nodes_free);
+
+	*new_node = pool->nodes_end;
+	GUARD_NULL(*new_node);
+	
+	(*new_node)->data = (void*)data;
+	(*new_node)->next = NULL;
+	(*new_node)->is_used = TRUE;
+	pool->nodes_free--;
+	pool->nodes_used++;
+	
+	GUARD_FAILURE(dsa_lc_pool_node_find_free(pool, (const dsa_LCNode**)&pool->nodes_end));
+
+	ret = EXIT_SUCCESS;
+cleanup:
+	return ret;
+}
+
 i8 
-dsa_lc_pool_init(dsa_LCPool *pool, u32 capacity) 
+dsa_lc_pool_init(dsa_LCPool * const pool, const u32 capacity) 
 {
     i8 ret = EXIT_FAILURE;
     u32 i = 0;
@@ -17,6 +62,7 @@ dsa_lc_pool_init(dsa_LCPool *pool, u32 capacity)
     }
     pool->nodes_used = 0;
     pool->nodes_free = pool->capacity = capacity;
+	pool->nodes_end = pool->nodes_start;
 
     ret = EXIT_SUCCESS;
 cleanup:
@@ -24,14 +70,14 @@ cleanup:
 }
 
 i8 
-dsa_lc_init(dsa_LC * const list, dsa_LCPool * const pool)
+dsa_lc_init(dsa_LC * const list, const dsa_LCPool * const pool)
 {
     i8 ret = EXIT_FAILURE;
 
     GUARD_NULL(list);
     GUARD_NULL(pool);
 
-    list->pool = pool;
+    list->pool = (dsa_LCPool*)pool;
     list->head = NULL;
 
     ret = EXIT_SUCCESS;
@@ -39,20 +85,21 @@ cleanup:
     return ret;
 }
 
-i8 
-dsa_lc_pool_find_free_node(const dsa_LCPool * const pool, const dsa_LCNode **dst)
+i8
+dsa_lc_push_front(dsa_LC * const list, const void * const data)
 {
     i8 ret = EXIT_FAILURE;
-    u32 i = 0;
+    dsa_LCNode *new_node = NULL;
 
-    GUARD_NULL(pool);
-    GUARD_NULL(dst);
-    GUARD_NON_NULL(*dst);
+    GUARD_NULL(list);
+    GUARD_NULL(data);
+	GUARD_NON_POS(list->pool->nodes_free);
+    GUARD_FAILURE(dsa_lc_pool_node_alloc(list->pool, &new_node, data));
 
-    for (; i < pool->capacity; i++) 
-    {
-        if (pool->nodes_start[i].is_used == FALSE) { *dst = &pool->nodes_start[i]; break; }
-    }
+    // if head is NULL, push new node to head
+    if (!list->head) { list->head = new_node; } 
+    // if head is not NULL, push head to node->next and set head to new node
+    else { new_node->next = list->head; list->head = new_node; }
 
     ret = EXIT_SUCCESS;
 cleanup:
@@ -60,7 +107,7 @@ cleanup:
 }
 
 i8
-dsa_lc_push_front(dsa_LC * const list, void * const data)
+dsa_lc_push_back(dsa_LC * const list, const void * const data)
 {
     i8 ret = EXIT_FAILURE;
     dsa_LCNode *new_node = NULL;
@@ -68,62 +115,12 @@ dsa_lc_push_front(dsa_LC * const list, void * const data)
     GUARD_NULL(list);
     GUARD_NULL(data);
     GUARD_NON_POS(list->pool->nodes_free);
-
-	// find first unused node
-	GUARD_FAILURE(dsa_lc_pool_find_free_node(list->pool, (const dsa_LCNode**)&new_node));
-	GUARD_NULL(new_node);
-
-	new_node->data = data;
-	new_node->is_used = TRUE;
-	list->pool->nodes_free--;
-	list->pool->nodes_used++;
-	list->pool->nodes_end = new_node;
+    GUARD_FAILURE(dsa_lc_pool_node_alloc(list->pool, &new_node, data));
 
 	// if head is NULL, push new node to head
-	if (!list->head) { list->head = new_node; } 
-	// if head is not NULL, push head to node->next and set head to new node
-	else { new_node->next = list->head; list->head = new_node; }
-
-    ret = EXIT_SUCCESS;
-cleanup:
-    return ret;
-}
-
-i8
-dsa_lc_push_back(dsa_LC * const list, void * const data)
-{
-    i8 ret = EXIT_FAILURE;
-    dsa_LCNode *new_node = NULL, *cur = NULL;
-    u32 i;
-
-    GUARD_NULL(list);
-    GUARD_NULL(data);
-    GUARD_NON_POS(list->pool->nodes_free);
-
-    /* Find first unused node */
-    for (i = 0; i < list->pool->capacity; ++i) {
-        if (!list->pool->nodes_start[i].is_used) {
-            new_node = &list->pool->nodes_start[i];
-            break;
-        }
-    }
-    GUARD_NULL(new_node);
-
-    new_node->data = data;
-    new_node->next = NULL;
-    new_node->is_used = TRUE;
-    list->pool->nodes_free--;
-    list->pool->nodes_used++;
-
-    if (list->head == NULL) {
-        list->head = new_node;
-    } else {
-        cur = list->head;
-        while (cur->next != NULL) {
-            cur = cur->next;
-        }
-        cur->next = new_node;
-    }
+	if (!list->head) { list->head = new_node; }
+	// if head is not NULL, push new node to end
+	else {  }
 
     ret = EXIT_SUCCESS;
 cleanup:
