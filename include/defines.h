@@ -49,7 +49,7 @@ STATIC_ASSERT(sizeof(b32) == 4, b32_must_be_4_bytes);
 #endif
 
 #ifndef DEBUG_BREAK
-#define DEBUG_BREAK() raise(SIGTRAP)
+#define DEBUG_BREAK() __builtin_trap()
 #endif
 
 static inline void
