@@ -52,7 +52,8 @@ STATIC_ASSERT(sizeof(b32) == 4, b32_must_be_4_bytes);
 static inline void
 debug_log(i32 level, const char* file, i32 line, const char* func, const char* fmt, ...)
 {
-    if (level <= DEBUG_LEVEL) {
+    if (level <= DEBUG_LEVEL) 
+	{
         va_list args;
         va_start(args, fmt);
         fprintf(stderr, "[%s:%d in %s] ", file, line, func);
