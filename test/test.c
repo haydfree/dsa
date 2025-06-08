@@ -244,7 +244,7 @@ test_lc_push_front(void)
 	// negative nodes free
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
-	fixture.pool.nodes_free = -1;
+	fixture.list.pool->nodes_free = -1;
 	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing front should fail with negative nodes free");
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
