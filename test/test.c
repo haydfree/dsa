@@ -48,6 +48,7 @@ main(void)
     TEST_SUITE_BEGIN("List Cursor Tests");
     
     test_lc_pool_init();
+	test_lc_init();
     
     TEST_SUITE_END();
     
