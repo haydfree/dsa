@@ -93,6 +93,7 @@ dsa_lc_get_tail(const dsa_LC * const list, const dsa_LCNode **dst)
 
 	GUARD_NULL(list);
 	GUARD_NULL(dst);
+	GUARD_NULL(list->head);
 
 	cur = list->head;
 	while (cur->next != NULL) { cur = cur->next; }

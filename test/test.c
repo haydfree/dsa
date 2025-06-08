@@ -106,7 +106,7 @@ test_lc_get_tail(void)
 
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
-	TEST_ASSERT(dsa_lc_get_tail(&fixture.list, (const dsa_LCNode**)&tail) == EXIT_SUCCESS, "Getting tail should succeed with empty list");
+	TEST_ASSERT(dsa_lc_get_tail(&fixture.list, (const dsa_LCNode**)&tail) == EXIT_FAILURE, "Getting tail should fail with empty list");
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
