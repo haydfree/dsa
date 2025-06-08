@@ -9,8 +9,8 @@ void
 test_lc_pool_init(void)
 {
     ListTestFixture fixture = {0};
-
     TEST_BEGIN("test_lc_pool_init");
+
     setup_list_fixture(&fixture);
     TEST_DUMP_POOL_STATE(&fixture.pool);
     TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, TEST_POOL_CAPACITY) == EXIT_SUCCESS, "Pool initialization failed");
@@ -37,8 +37,8 @@ void
 test_lc_init(void)
 {
     ListTestFixture fixture = {0};
-
 	TEST_BEGIN("test_lc_init");
+
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	TEST_ASSERT(dsa_lc_init(&fixture.list, (const dsa_LCPool*)&fixture.pool) == EXIT_SUCCESS, "List initialization failed");
