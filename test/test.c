@@ -39,6 +39,12 @@ test_lc_init(void)
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_init(NULL, (const dsa_LCPool*)&fixture.pool) == EXIT_FAILURE, "List initialization should fail with NULL list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	TEST_END();
 }
 
