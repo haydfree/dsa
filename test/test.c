@@ -245,15 +245,19 @@ test_lc_push_front(void)
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	fixture.list.pool->nodes_free = __UINT32_MAX__;
-	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing front should succeed with maxnodes free");
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing front should succeed with max nodes free");
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
-	// positive nodes free
-
 	// zero nodes free
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	fixture.list.pool->nodes_free = 0;
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing front should succeed with zero nodes free");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
 
-
+	// negative nodes free
 
 	TEST_END();
 }
