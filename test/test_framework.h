@@ -140,6 +140,7 @@ do { \
         { \
             TEST_DUMP_LIST_STATE(&g_test_stats.current_fixture->list); \
         } \
+        DEBUG_BREAK_IF(0, "Test assertion failed: %s", msg); \
         TEST_FAIL(msg); \
     } \
 } while(0)
@@ -149,6 +150,7 @@ do { \
     if ((actual) != (expected)) \
     { \
         TEST_ERROR("%s", "Assertion failed - values not equal"); \
+        DEBUG_BREAK_IF(0, "Test assertion failed - values not equal: %s", msg); \
         TEST_FAIL(msg); \
     } \
 } while(0)
@@ -158,6 +160,7 @@ do { \
     if ((ptr) != NULL) \
     { \
         TEST_ERROR("%s", "Assertion failed - expected NULL"); \
+        DEBUG_BREAK_IF(0, "Test assertion failed - expected NULL: %s", msg); \
         TEST_FAIL(msg); \
     } \
 } while(0)
@@ -167,6 +170,7 @@ do { \
     if ((ptr) == NULL) \
     { \
         TEST_ERROR("%s", "Assertion failed - expected non-NULL"); \
+        DEBUG_BREAK_IF(0, "Test assertion failed - expected non-NULL: %s", msg); \
         TEST_FAIL(msg); \
     } \
 } while(0)
