@@ -5,7 +5,7 @@
 
 TestStats g_test_stats = {0};
 
-static inline void
+static inline i8
 fill_fixture_pool(ListTestFixture * const fixture)
 {
 	i8 ret = EXIT_FAILURE;
