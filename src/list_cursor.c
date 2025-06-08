@@ -113,6 +113,7 @@ dsa_lc_push_front(dsa_LC * const list, const void * const data)
 
     GUARD_NULL(list);
     GUARD_NULL(data);
+	GUARD_NULL(list->pool);
 	GUARD_NON_POS(list->pool->nodes_free);
     GUARD_FAILURE(dsa_lc_pool_node_alloc(list->pool, &new_node, data));
 
