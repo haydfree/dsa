@@ -237,7 +237,7 @@ test_lc_push_front(void)
 	setup_list_fixture(&fixture);
 	fill_fixture_pool(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
-	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing front should succeed with full pool");
+	TEST_ASSERT(dsa_lc_push_front(&fixture.list, (const void*)0x01) == EXIT_FAILURE, "Pushing front should fail with full pool");
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
