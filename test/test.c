@@ -5,6 +5,29 @@
 
 TestStats g_test_stats = {0};
 
+static inline void
+fill_fixture_pool(ListTestFixture * const fixture)
+{
+	i8 ret = EXIT_FAILURE;
+	u32 i = 0;
+
+	GUARD_NULL(fixture);
+
+	for (; i < TEST_POOL_CAPACITY; i++)
+	{
+		fixture->pool.nodes_start[i].data = (void*)(i + 1);
+		fixture->pool.nodes_start[i].next = i < TEST_POOL_CAPACITY - 1 ? &fixture->pool.nodes_start[i + 1] : NULL;
+		fixture->pool.nodes_start[i].is_used = TRUE;
+	}
+	fixture->pool.nodes_end = &fixture->pool.nodes_start[TEST_POOL_CAPACITY - 1];
+	fixture->pool.nodes_free = 0;
+	fixture->pool.nodes_used = TEST_POOL_CAPACITY;
+
+	ret = EXIT_SUCCESS;
+cleanup:
+	return ret;
+}
+
 void
 test_lc_pool_init(void)
 {
@@ -13,7 +36,7 @@ test_lc_pool_init(void)
 
     setup_list_fixture(&fixture);
     TEST_DUMP_POOL_STATE(&fixture.pool);
-    TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, TEST_POOL_CAPACITY) == EXIT_SUCCESS, "Pool initialization failed");
+    TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, TEST_POOL_CAPACITY) == EXIT_SUCCESS, "Pool initialization should succeed");
     TEST_DUMP_POOL_STATE(&fixture.pool);
     verify_list_state(&fixture.list, 0, fixture.capacity);
     teardown_list_fixture(&fixture);
@@ -27,6 +50,13 @@ test_lc_pool_init(void)
 	setup_list_fixture(&fixture);
 	TEST_DUMP_POOL_STATE(&fixture.pool);
 	TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, 0) == EXIT_FAILURE, "Pool initialization should fail with 0 capacity");
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	teardown_list_fixture(&fixture);
+
+	setup_list_fixture(&fixture);
+	fill_fixture_pool(&fixture);
+	TEST_DUMP_POOL_STATE(&fixture.pool);
+	TEST_ASSERT(dsa_lc_pool_init(&fixture.pool, TEST_POOL_CAPACITY) == EXIT_SUCCESS, "Pool initialization should succeed");
 	TEST_DUMP_POOL_STATE(&fixture.pool);
 	teardown_list_fixture(&fixture);
 
