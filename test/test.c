@@ -35,7 +35,7 @@ test_lc_init(void)
 	TEST_BEGIN("test_lc_init");
 	setup_list_fixture(&fixture);
 	TEST_DUMP_LIST_STATE(&fixture.list);
-	TEST_ASSERT(dsa_lc_init(&fixture.list) == EXIT_SUCCESS, "List initialization failed");
+	TEST_ASSERT(dsa_lc_init(&fixture.list, (const dsa_LCPool*)&fixture.pool) == EXIT_SUCCESS, "List initialization failed");
 	TEST_DUMP_LIST_STATE(&fixture.list);
 	teardown_list_fixture(&fixture);
 
