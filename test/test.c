@@ -150,6 +150,45 @@ test_lc_get_tail(void)
 	TEST_END();
 }
 
+void
+test_lc_push_front(void)
+{
+    ListTestFixture fixture = {0};
+	TEST_BEGIN("test_lc_push_front");
+
+	// null list
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_front(NULL, (const void*)&fixture.pool.nodes_start[0]) == EXIT_FAILURE, "Pushing front should fail with NULL list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
+	// empty list
+
+	// full list
+
+	// null pool
+
+	// empty pool
+
+	// full pool
+
+	// null data
+
+	// max *data
+
+	// min *data
+
+	// negative nodes free
+
+	// positive nodes free
+
+	// zero nodes free
+
+
+
+	TEST_END();
+}
+
 int
 main(void)
 {

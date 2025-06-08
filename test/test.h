@@ -11,5 +11,6 @@
 void test_lc_pool_init(void);
 void test_lc_init(void);
 void test_lc_get_tail(void);
+void test_lc_push_front(void);
 
 #endif
