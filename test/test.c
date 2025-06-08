@@ -274,6 +274,12 @@ test_lc_push_back(void)
 	teardown_list_fixture(&fixture);
 
 	// empty list
+	setup_list_fixture(&fixture);
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	TEST_ASSERT(dsa_lc_push_back(&fixture.list, (const void*)0x01) == EXIT_SUCCESS, "Pushing back should succeed with empty list");
+	TEST_DUMP_LIST_STATE(&fixture.list);
+	teardown_list_fixture(&fixture);
+
 	// full list
 	// null data
 	// max data
